@@ -4,13 +4,15 @@ import com.demo.cleanarchitecture.user.application.port.`in`.UserCommand
 import com.demo.cleanarchitecture.user.application.port.`in`.UserQuery
 import com.demo.cleanarchitecture.user.application.port.`in`.dto.UpsertUserRequest
 import com.demo.cleanarchitecture.user.application.port.`in`.dto.UserResponse
+import com.demo.cleanarchitecture.user.application.port.out.UserCommandPort
 import com.demo.cleanarchitecture.user.application.port.out.UserQueryPort
 import com.demo.cleanarchitecture.user.domain.User
 import org.springframework.stereotype.Service
 
 @Service
 class UserService(
-    private val userQueryPort: UserQueryPort
+    private val userQueryPort: UserQueryPort,
+    private val userCommandPort: UserCommandPort
 ) : UserQuery, UserCommand {
     private var userSequence: Long = 2
     private val users: MutableMap<Long, User> = mutableMapOf(
@@ -22,29 +24,9 @@ class UserService(
 
     override fun getUser(id: Long): UserResponse = UserResponse.from(userQueryPort.findUserById(id))
 
-    override fun registerUser(req: UpsertUserRequest): UserResponse {
-        val user = User(
-            id = ++userSequence,
-            name = req.name,
-            email = req.email,
-            password = req.password,
-            age = req.age
-        )
-        users[user.id] = user
+    override fun registerUser(req: UpsertUserRequest): UserResponse =
+        UserResponse.from(userCommandPort.save(req.toUser()))
 
-        return UserResponse.from(user)
-    }
-
-
-    override fun updateUser(id: Long, req: UpsertUserRequest): UserResponse {
-        val user = users[id] ?: throw RuntimeException("user not found")
-        val updatedUser = user.copy(
-            name = req.name,
-            email = req.email,
-            password = req.password,
-            age = req.age
-        )
-        users[id] = updatedUser
-        return UserResponse.from(updatedUser)
-    }
+    override fun updateUser(id: Long, req: UpsertUserRequest): UserResponse =
+        UserResponse.from(userCommandPort.update(req.toUser(id)))
 }
