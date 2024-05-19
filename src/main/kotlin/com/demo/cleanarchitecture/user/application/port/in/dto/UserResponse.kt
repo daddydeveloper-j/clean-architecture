@@ -13,7 +13,7 @@ data class UserResponse(
     companion object {
         fun from(user: User) =
             UserResponse(
-                id = checkNotNull(user.id),
+                id = user.id,
                 name = user.name,
                 email = user.email,
                 password = user.password,

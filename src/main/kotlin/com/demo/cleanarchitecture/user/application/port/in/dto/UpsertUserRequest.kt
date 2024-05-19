@@ -1,6 +1,6 @@
-package com.demo.cleanarchitecture.user.domain
+package com.demo.cleanarchitecture.user.application.port.`in`.dto
 
-data class User(
+data class UpsertUserRequest(
     val id: Long,
     val name: String,
     val email: String,
