@@ -9,7 +9,6 @@ data class UserResponse(
     val password: String,
     val age: Int
 ) {
-
     companion object {
         fun from(user: User) =
             UserResponse(

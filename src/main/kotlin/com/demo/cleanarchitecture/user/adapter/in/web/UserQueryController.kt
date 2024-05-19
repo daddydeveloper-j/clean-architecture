@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController
 class UserQueryController(
     private val userQuery: UserQuery
 ) {
-
     @GetMapping
     fun getAllUsers(): List<UserResponse> = userQuery.getAllUsers()
 
