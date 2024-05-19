@@ -1,8 +1,8 @@
 package com.demo.cleanarchitecture.user.application.port.`in`
 
-import com.demo.cleanarchitecture.user.domain.User
+import com.demo.cleanarchitecture.user.application.port.`in`.dto.UserResponse
 
 interface UserQuery {
-    fun getAllUsers(): List<User>
-    fun getUser(id: Long): User?
+    fun getAllUsers(): List<UserResponse>
+    fun getUser(id: Long): UserResponse
 }
